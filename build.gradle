@@ -1,0 +1,27 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.6
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'org.easytesting', name: 'fest-assert-core', version: '2.0M10'
+}
+
+// Note: Control annotation processing here rather than through IntelliJ preferences.
+//
+// Annotation processing is on by default in javac (http://docs.oracle.com/javase/7/docs/technotes/tools/solaris/javac.html#processing)
+// So we need to turn it off for the compileJava task, otherwise it will fail because it can't find its own MergerProcessor
+// (the annotation processing happens before the class has been compiled). Annotation processing should be on for
+// the compileTestJava task as we want to use the annotation under test.
+//
+// You should build/test the app via Gradle tasks in Intellij, so that the correct settings are used.
+// This is similar to how it is done in Maven for Jake Wharton's ButterKnife library
+// See https://github.com/JakeWharton/butterknife/blob/master/butterknife/pom.xml#L55
+compileJava {
+    options.compilerArgs = ['-proc:none']
+}
